@@ -3,9 +3,11 @@
     <a href="https://cobertos.com" target="_blank"><img alt="twitter" src="https://img.shields.io/badge/website-cobertos.com-888888.svg"></a>
 </p>
 
-# Visuals Sandbox for Unity3D
+# Visuals Sandbox for Unity3D 2019.1+
 
 Tools and sandbox environment for making music visuals in Unity3D. Provides nice interfaces and debugging visuals for BPM sources, Time and Frequence space data, etc...
+
+It requires 2019.1+ to use `VisualElement`s. The code _could_ be backported to 2017.1+ but requires some modification...
 
 originally based on [my similar experiments/toolkit for THREE.js](https://github.com/Cobertos/MIDI-Experiment)
 
