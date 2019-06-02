@@ -9,13 +9,30 @@ Tools and sandbox environment for making music visuals in Unity3D. Provides nice
 
 originally based on [my similar experiments/toolkit for THREE.js](https://github.com/Cobertos/MIDI-Experiment)
 
-### Usage 
+### Installation
 
 1. Download or clone the repository, `git clone https://github.com/Cobertos/VisualsSandbox`
 2. Open it as a Unity project
 
-If assets are missing (they shouldn't), put in an issue and check the `.gitignore` as I will only distribute assets that are mine.
+### Usage
 
+There's not much here yet, but below is the list of components that currently exist:
+
+#### `BPMSource`
+
+![Bpm Source gif](./Media/bpmSource.gif)
+
+Represents a BPM source. The base class requires manually entering the BPMSource, but can be extended to infer BPM from audio intensity data or through a MIDI input from you or your friends DAW. Has a bunch of useful properties
+
+```
+.bpm - The current bpm
+.bpms - The number of beats in a millisecond
+.beat - The current beat of your song, given a proper epoch
+.getLastBeatTime(double frac = 1, double offset = 0) - The last time in milliseconds a beat occured
+.onceEvery(double frac, double offset, OnceEveryFunc func) - Executes a function every beat
+```
+
+check out [BPMSource.cs](./Assets/Scripts/VisualTools/BPMSource.cs) for more info
 
 ### Contributing
 
