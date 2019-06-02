@@ -40,7 +40,7 @@ public class BPMSourceEditor : Editor {
                     height = 50,
                     //width = ..., defaults to auto, full width in flexbox
                     marginBottom = 10,
-                    //unityFont = AssetDatabase.LoadAssetAtPath<Font>("Assets/VisualTools/Fonts/Aldrich/Aldrich-Regular.ttf")
+                    //unityFont = AssetDatabase.LoadAssetAtPath<Font>("Assets/VisualsTools/Fonts/Aldrich/Aldrich-Regular.ttf")
                 }
             };
         bpmLabel = new Label(){

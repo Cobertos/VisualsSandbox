@@ -32,7 +32,7 @@ Represents a BPM source. The base class requires manually entering the BPMSource
 .onceEvery(double frac, double offset, OnceEveryFunc func) - Executes a function every beat
 ```
 
-check out [BPMSource.cs](./Assets/Scripts/VisualTools/BPMSource.cs) for more info
+check out [BPMSource.cs](./Assets/Scripts/VisualsTools/BPMSource.cs) for more info
 
 ### Contributing
 
