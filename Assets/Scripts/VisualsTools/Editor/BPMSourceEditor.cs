@@ -18,6 +18,7 @@ public class BPMSourceEditor : Editor {
     SerializedProperty beatEpoch;
     VisualElement bpmIndicator;
     Label bpmLabel;
+    Label beatLabel;
 
     void OnEnable() {
         beatEpoch = serializedObject.FindProperty("beatEpoch");
@@ -29,24 +30,36 @@ public class BPMSourceEditor : Editor {
         VisualElement customInspector = new VisualElement();
         //BPM indicator header
         bpmIndicator = new VisualElement(){
-                style = {
-                    flexDirection = FlexDirection.Column,
-                    alignItems = Align.Center,
-                    justifyContent = Justify.FlexEnd,
+            style = {
+                flexDirection = FlexDirection.Column,
+                alignItems = Align.Stretch,
+                justifyContent = Justify.FlexEnd,
 
-                    backgroundColor = Color.black,
-                    color = Color.white,
-                    fontSize = 16,
-                    height = 50,
-                    //width = ..., defaults to auto, full width in flexbox
-                    marginBottom = 10,
-                    //unityFont = AssetDatabase.LoadAssetAtPath<Font>("Assets/VisualsTools/Fonts/Aldrich/Aldrich-Regular.ttf")
-                }
-            };
+                backgroundColor = Color.black,
+                color = Color.white,
+                fontSize = 16,
+                height = 50,
+                //width = ..., defaults to auto, full width in flexbox
+                marginBottom = 10,
+                unityFont = AssetDatabase.LoadAssetAtPath<Font>("Assets/VisualsTools/Fonts/RobotoMono/RobotoMono-Regular.ttf")
+            }
+        };
+        VisualElement bpmIndicatorBottomRow = new VisualElement(){
+            style = {
+                flexDirection = FlexDirection.Row,
+                alignItems = Align.Center,
+                justifyContent = Justify.SpaceBetween,
+            }
+        };
         bpmLabel = new Label(){
             text = "bpm",
         };
-        bpmIndicator.Add(bpmLabel);
+        beatLabel = new Label(){
+            text = "beat"
+        };
+        bpmIndicatorBottomRow.Add(bpmLabel);
+        bpmIndicatorBottomRow.Add(beatLabel);
+        bpmIndicator.Add(bpmIndicatorBottomRow);
         customInspector.Add(bpmIndicator);
 
         //Epoch control
@@ -73,14 +86,19 @@ public class BPMSourceEditor : Editor {
     }
 
     public void Refresh() {
+        if(serializedObject == null || serializedObject.targetObject == null) {
+            return;
+        }
         BPMSource bpmSource = serializedObject.targetObject as BPMSource;
 
         double blinkValue = 1.0 - (bpmSource.beat - Math.Truncate(bpmSource.beat));
         bpmIndicator.style.backgroundColor = new Color(0,0,(float)blinkValue, 1);
 
+        bpmLabel.text = "BPM " + bpmSource.bpm;
+
         double beat2 = Math.Truncate(bpmSource.beat * 100.0) / 100.0;
         string beatFormatted = beat2.ToString("n2");
-        bpmLabel.text = "BPM " + bpmSource.bpm + " | B# " + beatFormatted;
+        beatLabel.text = "B# " + beatFormatted;
     }
 }
 

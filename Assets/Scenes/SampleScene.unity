@@ -240,8 +240,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 140968589af517d4389055fd32005793, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beatEpoch: 63695087423140
-  bpm: 130
+  beatEpoch: 63695127148546
+  bpm: 120
 --- !u!4 &293357608
 Transform:
   m_ObjectHideFlags: 0
