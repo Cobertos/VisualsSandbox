@@ -86,10 +86,14 @@ public class BPMSourceEditor : Editor {
     }
 
     public void Refresh() {
-        if(serializedObject == null || serializedObject.targetObject == null) {
+        BPMSource bpmSource;
+        try {
+            bpmSource = target as BPMSource;
+        }
+        catch(System.Exception e) {
+            Debug.Log("Not ready");
             return;
         }
-        BPMSource bpmSource = serializedObject.targetObject as BPMSource;
 
         double blinkValue = 1.0 - (bpmSource.beat - Math.Truncate(bpmSource.beat));
         bpmIndicator.style.backgroundColor = new Color(0,0,(float)blinkValue, 1);
