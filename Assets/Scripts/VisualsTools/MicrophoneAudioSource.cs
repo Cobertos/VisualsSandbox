@@ -55,7 +55,7 @@ public class MicrophoneAudioSource : MonoBehaviour {
         Microphone.GetDeviceCaps(deviceName, out minFreq, out maxFreq);
         int sampleFreq = maxFreq == 0 ? 44100 : maxFreq;
         Debug.Log("Starting Microphone " + (deviceName ?? "Default Device") + " @ " + sampleFreq + "Hz.");
-        source.clip = Microphone.Start(deviceName, true, 10, sampleFreq);
+        source.clip = Microphone.Start(deviceName, true, 1, sampleFreq);
         source.loop = true;
         source.Play();
     }
