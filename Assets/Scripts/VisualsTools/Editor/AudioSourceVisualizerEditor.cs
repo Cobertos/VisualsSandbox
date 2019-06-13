@@ -59,6 +59,23 @@ public class AudioSourceVisualizerEditor : Editor {
         customInspector.Add(visualizerContainer);
 
         //X axis
+        VisualElement xAxisContainer2 = new VisualElement(){
+            style = {
+                flexDirection = FlexDirection.Row,
+                alignItems = Align.FlexStart,
+                justifyContent = Justify.SpaceBetween,
+            }
+        };
+        for(int i = 0; i < 5; i++) {
+            xAxisContainer2.Add(new VisualElement(){
+                style = {
+                    width = 2,
+                    height = 7,
+                    backgroundColor = Color.black,
+                }
+            });
+        }
+        customInspector.Add(xAxisContainer2);
         VisualElement xAxisContainer = new VisualElement(){
             style = {
                 flexDirection = FlexDirection.Row,
