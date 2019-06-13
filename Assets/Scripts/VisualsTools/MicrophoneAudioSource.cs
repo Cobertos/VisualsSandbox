@@ -9,6 +9,16 @@ namespace CobVisuals {
 /// <summary>
 /// Attaches the microphone to the current audio source
 /// </summary>
+/// <remarks>
+/// Unity is really weird with Microphone input so you might experience some weird garbage.
+/// - Latency seems to directly correlate to the length of the Microphone.Start() clip. Because it's an
+/// int, the lowest you can go is 1, and it will be 1 second of latency... :/
+/// - Garbage crackling and shit... Make sure that your sound is first of all hooked up to a Mixer. Second
+/// if it's still crackling, edit the mixer in edit mode and change the pitch. It should fix it for the rest of the time
+/// that unity is open
+/// - Sometimes Unity will start and get some really nasty memory leaks with this. I don't know why. you just have to
+/// restart
+/// </remarks>
 [RequireComponent(typeof(AudioSource))]
 public class MicrophoneAudioSource : MonoBehaviour {
     private string _deviceName;
@@ -36,7 +46,11 @@ public class MicrophoneAudioSource : MonoBehaviour {
     ///<summary> Starts a microphone, no guarentee that it actually starts (see TrySetupMicrophoneSource) </summary>
     private void SetupMicrophoneSource(string deviceName) {
         AudioSource source = GetComponent<AudioSource>();
-        source.clip = Microphone.Start(deviceName, true, 10, 44100);
+        int minFreq, maxFreq;
+        Microphone.GetDeviceCaps(deviceName, out minFreq, out maxFreq);
+        int sampleFreq = maxFreq == 0 ? 44100 : maxFreq;
+        Debug.Log("Starting Microphone " + (deviceName ?? "Default Device") + " @ " + sampleFreq + ".");
+        source.clip = Microphone.Start(deviceName, true, 10, sampleFreq);
         source.loop = true;
         source.Play();
     }

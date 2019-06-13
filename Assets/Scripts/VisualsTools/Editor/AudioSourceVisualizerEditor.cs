@@ -15,9 +15,10 @@ namespace CobVisuals {
 public class AudioSourceVisualizerEditor : Editor {
 
     static int height = 50;
-    static int samples = 128; //TODO: Configurable, must be power of 2 as well according to docs
+    static int samples = 8192; //TODO: Configurable, must be power of 2 as well according to docs, 2 - 8192
+    static int outputSamples = 128; //The actual output frequency bars, on a log scale
 
-    VisualElement[] bins = new VisualElement[AudioSourceVisualizerEditor.samples];
+    VisualElement[] bins = new VisualElement[AudioSourceVisualizerEditor.outputSamples];
 
     //void OnEnable() {
     //}
@@ -89,11 +90,15 @@ public class AudioSourceVisualizerEditor : Editor {
 
         int idx = 0;
         foreach(VisualElement bin in bins) {
-            float db = 20 * Mathf.Log10(spectrumBins[idx] / 1.0e-6f); // calculate dB
-            float linear = Mathf.Clamp(db / 120.0f, 0.0f,1.0f);
+            double binRange = (double)idx / bins.Length;
+            int binIdx = (int)Math.Truncate(Math.Pow(10.0,binRange*3.6+1.0)/Math.Pow(10.0,4.6) * samples);
+
+            float db = 20 * Mathf.Log10(spectrumBins[binIdx] / 1.0e-6f); // calculate dB
+            float linear = Mathf.Clamp(db / 80.0f, 0.0f,1.0f);
 
             bin.style.height = linear * (AudioSourceVisualizerEditor.height-2) + 2;
             bin.style.backgroundColor = new Color(linear,68.0f/255.0f,136.0f/255.0f,1.0f);
+
             idx++;
         }
     }
