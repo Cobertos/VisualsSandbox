@@ -44,7 +44,7 @@ Plots the spectrum data of an audio source live.
 
 #### `MicrophoneAudioSource`
 
-![Microphone audio source GUI](./Media/microphoneAudioSource.png)
+![Microphone audio source GUI](./Media/MicrophoneAudioSource.png)
 
 Working with Microphone sound is a massive pain in Unity. This `MonoBehavior` sets up the attached `AudioSource` with Microphone input. Using something like [`Virtual Audio Cable/Volumeeter`](https://www.vb-audio.com/Cable/index.htm) on Windows, you can pipe music to a Microphone input and do stuff with it in Unity.
 
