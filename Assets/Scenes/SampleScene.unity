@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: 293357608}
   - component: {fileID: 293357607}
   - component: {fileID: 293357609}
+  - component: {fileID: 293357612}
   - component: {fileID: 293357610}
   - component: {fileID: 293357611}
   m_Layer: 0
@@ -243,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 140968589af517d4389055fd32005793, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beatEpoch: 63695994405345
+  beatEpoch: 63695999252024
   bpm: 120
 --- !u!4 &293357608
 Transform:
@@ -382,6 +383,19 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &293357612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 293357606}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd868c1d8b464614eb231ab46a74fd30, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  source: {fileID: 0}
 --- !u!1 &373670013
 GameObject:
   m_ObjectHideFlags: 0

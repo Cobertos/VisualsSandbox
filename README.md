@@ -51,9 +51,10 @@ Working with Microphone sound is a massive pain in Unity. This `MonoBehavior` se
 Troubleshooting/Notes:
 
 * If the audio is also playing in Unity (it most likely is). Attach your audio source to a mixer (in the Audio Mixer window) and attentuate it down to 0. That's the only way to mute it while still getting the unmodified spectrum data.
-* There seems to be latency based on the length of the clip in `Microphone.Start()`. To mitigate
+* There seems to be latency based on the length of the clip in `Microphone.Start()`. To mitigate:
  * Make sure that your DSP Buffer is set to "Best Latency" in your project settings
-* If you experience garbage crackling and stuff in your microphone, make sure that your audio source outputs to a mixer. Once you start your game in the editor, edit the pitch of that mixer and set it back to 100.00%, it should go away while the game is still active. The code tries to account for this (waiting until the microphone position is > 0) but it might not work all the time.
+ * Make sure the recording clip sze is 1 (for some reason I get more latency at 10sec)
+* If you experience garbage crackling and stuff in your microphone, make sure that your audio source outputs to a mixer. Once you start your game in the editor, edit the pitch of that mixer and set it back to 100.00%, it should go away while the game is still active. The code tries to account for this ([waiting until the microphone position is > 0](https://support.unity3d.com/hc/en-us/articles/206485253-How-do-I-get-Unity-to-playback-a-Microphone-input-in-real-time-)) but it might not work all the time.
 * Using with other audio tools could potentially cause conflicts at least in Windows. [Voicemeeter](https://forum.vb-audio.com/viewtopic.php?t=87#p474) has a good write up here, but Windows audio has potentially multiple interfaces (MME, WASAPI, KS, Direct-X) to access audio devices from and doing so from multiple different ones or if any tool accesses in "Exclusive" mode can cause failures. Take care when choosing these settings in your other programs as they could conflict with Unity
  * In the case of Voicemeeter, it defaults to WDM (faster and newer), though you should use MME, otherwise it will cause Unity to hang and/or start leaking memory and requires a Unity restart.
 

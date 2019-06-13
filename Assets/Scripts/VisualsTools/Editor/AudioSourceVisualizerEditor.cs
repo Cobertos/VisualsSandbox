@@ -58,6 +58,23 @@ public class AudioSourceVisualizerEditor : Editor {
         }
         customInspector.Add(visualizerContainer);
 
+        //X axis
+        VisualElement xAxisContainer = new VisualElement(){
+            style = {
+                flexDirection = FlexDirection.Row,
+                alignItems = Align.FlexEnd,
+                justifyContent = Justify.SpaceBetween,
+
+                fontSize = 10,
+            }
+        };
+        for(int i = 0; i < 5; i++) {
+            xAxisContainer.Add(new Label(){
+                text = "10^" + (i+1)
+            });
+        }
+        customInspector.Add(xAxisContainer);
+
         //AudioSource control
         customInspector.Add(new PropertyField(serializedObject.FindProperty("source")));
         EditorApplication.update += Refresh;
