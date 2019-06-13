@@ -6,7 +6,6 @@ namespace CobVisuals {
 /// <summary>
 /// Simple audio visualizer for AudioSources
 /// </summary>
-[ExecuteInEditMode]
 public class AudioSourceVisualizer : MonoBehaviour {
     public AudioSource source;
 }

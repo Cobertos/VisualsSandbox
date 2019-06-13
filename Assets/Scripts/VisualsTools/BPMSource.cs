@@ -7,21 +7,23 @@ using UnityEngine;
 namespace CobVisuals {
 
 /// <summary>
-/// Base class and functionality for getting BPM
+/// Base class and functionality for getting BPM.
 /// </summary>
-[ExecuteInEditMode]
+/// <remarks>
+/// BPM must be manually entered. Derive for dynamic BPM updating, like from MIDI fed BPM or inferred BPM
+/// </remarks>
+[ExecuteInEditMode] //TODO: Do we still want this?
 public class BPMSource : MonoBehaviour {
     //TODO: Getter for bpm
 
     /// <summary> The start of the song in MS/the time where `.beat` would be 0.0</summary>
     public double beatEpoch;
     /// <summary> Beats per minute </summary>
-    public double bpm; //TODO: Needs implementation
+    public double bpm = 120.0;
 
     void Awake(){
         //Set the beatEpoch to Now, let the user change later
         beatEpoch = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
-        bpm = 120.0; //TODO: Needs implementation
     }
 
 
@@ -71,8 +73,6 @@ public class BPMSource : MonoBehaviour {
     //    return this.getLastBeatTime(frac) + (this.mspb * frac);
     //}
 
-
-    public delegate void OnceEveryFunc();
     /// <summary>
     /// Wrap a passed delegate to only run a maximum every fractional beat
     /// </summary>
@@ -80,7 +80,7 @@ public class BPMSource : MonoBehaviour {
     /// Call this every Update() and it will always trigger just after the last beat dependant on
     /// Unity's frame rate
     /// </remarks>
-    public OnceEveryFunc onceEvery(double frac, double offset, OnceEveryFunc func) {
+    public System.Action onceEvery(double frac, double offset, System.Action func) {
         double lastFuncTime = 0;
         double lbt; //last beat time
         return ()=>{
