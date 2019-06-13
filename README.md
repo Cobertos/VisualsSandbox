@@ -46,13 +46,16 @@ Plots the spectrum data of an audio source live.
 
 ![Microphone audio source GUI](./Media/MicrophoneAudioSource.png)
 
-Working with Microphone sound is a massive pain in Unity. This `MonoBehavior` sets up the attached `AudioSource` with Microphone input. Using something like [`Virtual Audio Cable/Volumeeter`](https://www.vb-audio.com/Cable/index.htm) on Windows, you can pipe music to a Microphone input and do stuff with it in Unity.
+Working with Microphone sound is a massive pain in Unity. This `MonoBehavior` sets up the attached `AudioSource` with Microphone input. Using something like [`Virtual Audio Cable/Voicemeeter`](https://www.vb-audio.com/Cable/index.htm) on Windows, you can pipe music to a Microphone input and do stuff with it in Unity.
 
-Note:
+Troubleshooting/Notes:
 
-* There seems to be latency based on the length of the clip in `Microphone.Start()`. It's an integer, so the lowest it goes is 1, 1 second of latency seemingly. This is unfixable right now :(
-* If you experience garbage crackling and stuff in your microphone, make sure that your audio source outputs to a mixer. Once you start your game in the editor, edit the pitch of that mixer and set it back to 100.00%, it should go away while the game is still active. Annoying af, but I don't know how to fix.
-* Sometimes Unity will get really nasty memory leaks when working with `Microphone.Start()`. If your console fills up with them just restart Unity. Though it's usually stable...
+* If the audio is also playing in Unity (it most likely is). Attach your audio source to a mixer (in the Audio Mixer window) and attentuate it down to 0. That's the only way to mute it while still getting the unmodified spectrum data.
+* There seems to be latency based on the length of the clip in `Microphone.Start()`. To mitigate
+ * Make sure that your DSP Buffer is set to "Best Latency" in your project settings
+* If you experience garbage crackling and stuff in your microphone, make sure that your audio source outputs to a mixer. Once you start your game in the editor, edit the pitch of that mixer and set it back to 100.00%, it should go away while the game is still active. The code tries to account for this (waiting until the microphone position is > 0) but it might not work all the time.
+* Using with other audio tools could potentially cause conflicts at least in Windows. [Voicemeeter](https://forum.vb-audio.com/viewtopic.php?t=87#p474) has a good write up here, but Windows audio has potentially multiple interfaces (MME, WASAPI, KS, Direct-X) to access audio devices from and doing so from multiple different ones or if any tool accesses in "Exclusive" mode can cause failures. Take care when choosing these settings in your other programs as they could conflict with Unity
+ * In the case of Voicemeeter, it defaults to WDM (faster and newer), though you should use MME, otherwise it will cause Unity to hang and/or start leaking memory and requires a Unity restart.
 
 ### Contributing
 

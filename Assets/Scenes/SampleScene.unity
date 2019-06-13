@@ -243,7 +243,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 140968589af517d4389055fd32005793, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beatEpoch: 63695891128499
+  beatEpoch: 63695994405345
   bpm: 120
 --- !u!4 &293357608
 Transform:
@@ -284,6 +284,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f182adec6cd1bc24d99a7c983cbbfee4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _deviceName: VoiceMeeter Output (VB-Audio VoiceMeeter VAIO)
 --- !u!82 &293357611
 AudioSource:
   m_ObjectHideFlags: 0

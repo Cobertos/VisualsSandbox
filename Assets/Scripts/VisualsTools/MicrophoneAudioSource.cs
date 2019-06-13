@@ -17,8 +17,6 @@ namespace CobVisuals {
 /// - Garbage crackling and shit... Make sure that your sound is first of all hooked up to a Mixer. Second
 /// if it's still crackling, edit the mixer in edit mode and change the pitch. It should fix it for the rest of the time
 /// that unity is open
-/// - Sometimes Unity will start and get some really nasty memory leaks with this. I don't know why. you just have to
-/// restart
 /// </remarks>
 [RequireComponent(typeof(AudioSource))]
 public class MicrophoneAudioSource : MonoBehaviour {
@@ -44,11 +42,14 @@ public class MicrophoneAudioSource : MonoBehaviour {
 
     public event System.Action DeviceStateChanged;
 
-    public bool isListening {
+    public bool isListening { //TODO: Consider Microphone.IsRecording(selectedDevice)
         get; private set;
     }
 
-    ///<summary> Starts a microphone, no guarentee that it actually starts (see TrySetupMicrophoneSource) </summary>
+    ///<summary> Starts a microphone</summary>
+    ///<remarks> If Microphone.Start fails or hangs, you're SOL (see TrySetupMicrophoneSource).
+    /// Caller is responsible for source.Play(); after setup and proper while(!(Microphone.GetPosition(deviceName) > 0)) {}
+    ///</remarks>
     private void SetupMicrophoneSource(string deviceName) {
         AudioSource source = GetComponent<AudioSource>();
         int minFreq, maxFreq;
@@ -57,7 +58,6 @@ public class MicrophoneAudioSource : MonoBehaviour {
         Debug.Log("Starting Microphone " + (deviceName ?? "Default Device") + " @ " + sampleFreq + "Hz.");
         source.clip = Microphone.Start(deviceName, true, 1, sampleFreq);
         source.loop = true;
-        source.Play();
     }
 
     ///<summary>Coroutine that supports TrySetupMicrophoneSource, can't yield in a lambda :( </summary>
@@ -65,7 +65,6 @@ public class MicrophoneAudioSource : MonoBehaviour {
         SetupMicrophoneSource(deviceName);
         double startTime = DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond;
         while(!(Microphone.GetPosition(deviceName) > 0)) {
-            yield return null; //Let the coroutine continue
             double waitingTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTime;
             if(waitingTime > 1000) { //Waiting more than 1 second
                 isListening = false;
@@ -73,7 +72,9 @@ public class MicrophoneAudioSource : MonoBehaviour {
                 DeviceStateChanged();
                 yield break;
             }
+            yield return null; //Let the coroutine continue
         }
+        GetComponent<AudioSource>().Play();
         isListening = true;
         cb(true);
         DeviceStateChanged();
