@@ -17,6 +17,7 @@ namespace CobVisuals {
 [CanEditMultipleObjects]
 public class AudioSourcePlaybackDebuggerEditor : Editor {
     Label readHeadLabel;
+    Label latencyLabel;
     Label writeHeadLabel;
     VisualElement readHead; //The AudioSource reading position in the audio clip
     VisualElement writeHead; //The microphone writing position in the audio clip
@@ -52,6 +53,13 @@ public class AudioSourcePlaybackDebuggerEditor : Editor {
             }
         };
         playbackContainer.Add(readHeadLabel);
+        latencyLabel = new Label(){
+            text = "???ms",
+            style = {
+                color = Color.white
+            }
+        };
+        playbackContainer.Add(latencyLabel);
         writeHeadLabel = new Label(){
             text = "???",
             style = {
@@ -126,6 +134,13 @@ public class AudioSourcePlaybackDebuggerEditor : Editor {
 
         readHead.style.left = (int)((double)audioSource.timeSamples / audioSource.clip.samples * GetVisualizerWidth());
         writeHead.style.left = (int)((double)Microphone.GetPosition(source.deviceName) / audioSource.clip.samples * GetVisualizerWidth());
+        
+        int sampleDiff = Microphone.GetPosition(source.deviceName) - audioSource.timeSamples;
+        if(sampleDiff < 0) {
+            sampleDiff += audioSource.clip.samples; //If it wrapped
+        }
+        double sampleDiffMS = sampleDiff * (1.0/audioSource.clip.frequency) * 1000;
+        latencyLabel.text = $"{sampleDiffMS.ToString("n0")}ms";
     }
 }
 
