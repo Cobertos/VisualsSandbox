@@ -10,6 +10,9 @@ namespace CobVisuals {
 /// <summary>
 /// Shows where the microphone and AudioSource are writing/reading respectively in the audio clip and has adjustments
 /// </summary>
+/// <remarks>
+/// Allows you to debug latency, crackling, and other real time audio stabability problems more easily
+/// </remarks>
 [CustomEditor(typeof(AudioSourcePlaybackDebugger))]
 [CanEditMultipleObjects]
 public class AudioSourcePlaybackDebuggerEditor : Editor {
@@ -17,6 +20,7 @@ public class AudioSourcePlaybackDebuggerEditor : Editor {
     Label writeHeadLabel;
     VisualElement readHead; //The AudioSource reading position in the audio clip
     VisualElement writeHead; //The microphone writing position in the audio clip
+    VisualElement root;
 
     public static int Clamp(int a, int min, int max) {
         return Math.Max(Math.Min(a, max), min);
@@ -24,7 +28,7 @@ public class AudioSourcePlaybackDebuggerEditor : Editor {
 
     public override VisualElement CreateInspectorGUI()
     {
-        VisualElement customInspector = new VisualElement();
+        root = new VisualElement();
         //Playback
         VisualElement playbackContainer = new VisualElement(){
             style = {
@@ -76,21 +80,25 @@ public class AudioSourcePlaybackDebuggerEditor : Editor {
             }
         };
         playbackContainer.Add(writeHead);
-        customInspector.Add(playbackContainer);
+        root.Add(playbackContainer);
 
         //AudioSource control
-        customInspector.Add(new PropertyField(serializedObject.FindProperty("source")));
+        root.Add(new PropertyField(serializedObject.FindProperty("source")));
 
-        customInspector.Add(new Button(()=>{
+        root.Add(new Button(()=>{
             var m = (target as AudioSourcePlaybackDebugger).source;
             var s = m.GetComponent<AudioSource>();
-            s.timeSamples = AudioSourcePlaybackDebuggerEditor.Clamp(Microphone.GetPosition(m.deviceName) - 3000,0,s.clip.samples);
+            s.timeSamples = AudioSourcePlaybackDebuggerEditor.Clamp(Microphone.GetPosition(m.deviceName) - 1000,0,s.clip.samples);
         }){
-            text = "Calibrate (-3000 samples behind WRITE)"
+            text = "Calibrate (-1000 samples behind WRITE)"
         });
 
         EditorApplication.update += Refresh;
-        return customInspector;
+        return root;
+    }
+
+    public double GetVisualizerWidth() {
+        return System.Single.IsNaN(root.resolvedStyle.width) ? 300.0 : (double)root.resolvedStyle.width;
     }
 
     public void Refresh() {
@@ -116,8 +124,8 @@ public class AudioSourcePlaybackDebuggerEditor : Editor {
             return;
         }
 
-        readHead.style.left = (int)((double)audioSource.timeSamples / audioSource.clip.samples * 300);
-        writeHead.style.left = (int)((double)Microphone.GetPosition(source.deviceName) / audioSource.clip.samples * 300);
+        readHead.style.left = (int)((double)audioSource.timeSamples / audioSource.clip.samples * GetVisualizerWidth());
+        writeHead.style.left = (int)((double)Microphone.GetPosition(source.deviceName) / audioSource.clip.samples * GetVisualizerWidth());
     }
 }
 
