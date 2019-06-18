@@ -8,6 +8,8 @@ namespace CobVisuals {
 /// </summary>
 public class AudioSourceVisualizer : MonoBehaviour {
     public AudioSource source;
+    //Controls
+    public bool useLogScale = true;
 }
 
 }

@@ -39,12 +39,11 @@ public class MicrophoneAudioSource : MonoBehaviour {
             }
         }
     }
+    public int sampleFrequency {
+        get; protected set;
+    }
 
     public event System.Action DeviceStateChanged;
-
-    public bool isListening { //TODO: Consider Microphone.IsRecording(selectedDevice)
-        get; private set;
-    }
 
     ///<summary> Starts a microphone</summary>
     ///<remarks> If Microphone.Start fails or hangs, you're SOL (see TrySetupMicrophoneSource).
@@ -54,9 +53,9 @@ public class MicrophoneAudioSource : MonoBehaviour {
         AudioSource source = GetComponent<AudioSource>();
         int minFreq, maxFreq;
         Microphone.GetDeviceCaps(deviceName, out minFreq, out maxFreq);
-        int sampleFreq = maxFreq == 0 ? 44100 : maxFreq;
-        Debug.Log("Starting Microphone " + (deviceName ?? "Default Device") + " @ " + sampleFreq + "Hz.");
-        source.clip = Microphone.Start(deviceName, true, 1, sampleFreq);
+        sampleFrequency = maxFreq == 0 ? 44100 : maxFreq;
+        Debug.Log("Starting Microphone " + (deviceName ?? "Default Device") + " @ " + sampleFrequency + "Hz.");
+        source.clip = Microphone.Start(deviceName, true, 1, sampleFrequency);
         source.loop = true;
     }
 
@@ -67,7 +66,6 @@ public class MicrophoneAudioSource : MonoBehaviour {
         while(!(Microphone.GetPosition(deviceName) > 0)) {
             double waitingTime = (DateTime.Now.Ticks / TimeSpan.TicksPerMillisecond) - startTime;
             if(waitingTime > 1000) { //Waiting more than 1 second
-                isListening = false;
                 cb(false);
                 DeviceStateChanged();
                 yield break;
@@ -75,7 +73,6 @@ public class MicrophoneAudioSource : MonoBehaviour {
             yield return null; //Let the coroutine continue
         }
         GetComponent<AudioSource>().Play();
-        isListening = true;
         cb(true);
         DeviceStateChanged();
     }
@@ -94,7 +91,7 @@ public class MicrophoneAudioSource : MonoBehaviour {
 
     ///<summary>Detaches the microphone from the current audio source</summary>
     public void TeardownMicrophoneSource() {
-        if(!isListening) {
+        if(!Microphone.IsRecording(this._deviceName)) {
             return;
         }
         AudioSource source = GetComponent<AudioSource>();
@@ -102,10 +99,6 @@ public class MicrophoneAudioSource : MonoBehaviour {
         source.clip = null;
         Microphone.End(this.deviceName);
         DeviceStateChanged();
-    }
-
-    void Awake() {
-        isListening = false;
     }
 
     public void OnEnable() {

@@ -244,7 +244,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 140968589af517d4389055fd32005793, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  beatEpoch: 63696128998811
+  beatEpoch: 63696472157651
   bpm: 120
 --- !u!4 &293357608
 Transform:
@@ -273,6 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   source: {fileID: 293357611}
+  useLogScale: 1
 --- !u!114 &293357610
 MonoBehaviour:
   m_ObjectHideFlags: 0
