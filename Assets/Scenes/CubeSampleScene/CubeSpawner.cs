@@ -13,7 +13,7 @@ public class CubeSpawner : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         spawnFunc = bpmSource.onceEvery(4, 0, ()=>{
-            GameObject go = Instantiate(spawnPrefab, Vector3.zero, Quaternion.identity);
+            GameObject go = Instantiate(spawnPrefab, Vector3.zero, Quaternion.identity, this.transform);
             go.GetComponent<CubeChanger>().bpmSource = bpmSource;
         });
     }

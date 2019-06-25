@@ -35,11 +35,13 @@ public class CubeChanger : MonoBehaviour {
 
     void FixedUpdate() {
         changeFuncFixed();
-        //Acceleration toward the origin
-        Vector3 vec2Origin = this.transform.position * -1;
-        vec2Origin.Normalize();
-        vec2Origin *= 40f;
-        this.GetComponent<Rigidbody>().AddForce(vec2Origin, ForceMode.Acceleration);
+        if(!Input.GetKey(KeyCode.C)) {
+            //Acceleration toward the origin
+            Vector3 vec2Origin = this.transform.position * -1;
+            vec2Origin.Normalize();
+            vec2Origin *= 40f;
+            this.GetComponent<Rigidbody>().AddForce(vec2Origin, ForceMode.Acceleration);
+        }
     }
 }
 
