@@ -78,13 +78,16 @@ public class BPMSource : MonoBehaviour {
     /// </summary>
     /// <remarks>
     /// Call this every Update() and it will always trigger just after the last beat dependant on
-    /// Unity's frame rate
+    /// Unity's frame rate.
+    /// It's advised you pass a extraMSOffset of Time.deltaTime * 1000.0f so that your function fires just before the
+    /// the frame after the beat
     /// </remarks>
-    public System.Action onceEvery(double frac, double offset, System.Action func) {
+    public System.Action onceEvery(double frac, double offset, System.Action func, double extraMSOffset = 0) {
         double lastFuncTime = 0;
         double lbt; //last beat time
         return ()=>{
-            lbt = this.getLastBeatTime(frac, offset);
+            lbt = this.getLastBeatTime(frac, offset) + extraMSOffset;
+            Debug.Log(lbt + " " + lastFuncTime + " " + this.beat);
             if(lbt > lastFuncTime) {
                 lastFuncTime = lbt;
                 func();

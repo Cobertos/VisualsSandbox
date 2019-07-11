@@ -67,5 +67,5 @@ AudioMixerSnapshotController:
   m_FloatValues:
     1f3c07942e0458f469ab563e29bce306: 978
     3b6d23e78b556dd43a0b91fcaf3f5303: 1
-    956df12eaa856864692623d56c1a1adc: 0.6
+    956df12eaa856864692623d56c1a1adc: -80
   m_TransitionOverrides: {}

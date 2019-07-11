@@ -12,7 +12,7 @@ namespace CobVisuals {
 /// <summary>
 /// Base class and functionality for getting BPM
 /// </summary>
-[CustomEditor(typeof(BPMSource))]
+[CustomEditor(typeof(BPMSource), true)]
 [CanEditMultipleObjects]
 public class BPMSourceEditor : Editor {
     SerializedProperty beatEpoch;
@@ -22,7 +22,6 @@ public class BPMSourceEditor : Editor {
 
     void OnEnable() {
         beatEpoch = serializedObject.FindProperty("beatEpoch");
-        
     }
 
     public override VisualElement CreateInspectorGUI()
